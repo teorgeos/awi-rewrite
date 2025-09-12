@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>표시 페이지 (index로 변경했음다)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    .status { font-size: 14px; margin-bottom: 12px; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 16px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; font-size: 22px; }
+    .meta { color:#666; font-size: 12px; margin-top: 6px; }
+  </style>
+
+   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDl-1zPFjsggpmQWEFyaR69amHoasniSDM",
+    authDomain: "awi-rewrite.firebaseapp.com",
+    projectId: "awi-rewrite",
+    storageBucket: "awi-rewrite.firebasestorage.app",
+    messagingSenderId: "618121283744",
+    appId: "1:618121283744:web:f4b7c436518a4b704d61c5",
+    measurementId: "G-QVWMJTRMC2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
+
+
+</script>
+
+</head>
+<body>
+  <h1>실시간 보드 (2번)</h1>
+  <div class="status" id="status">연결 상태: <strong>연결 중…</strong></div>
+
+  <ul id="displayList"></ul>
+<script defer src="./script.js"></script>
+<a href="./display.html">입력 화면</a>  <!-- 보기→입력 -->
+<a href="./index.html">보기 화면</a>    <!-- 입력→보기(루트라면 './'도 가능) -->
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>입력 페이지 (2번)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDl-1zPFjsggpmQWEFyaR69amHoasniSDM",
+    authDomain: "awi-rewrite.firebaseapp.com",
+    projectId: "awi-rewrite",
+    storageBucket: "awi-rewrite.firebasestorage.app",
+    messagingSenderId: "618121283744",
+    appId: "1:618121283744:web:f4b7c436518a4b704d61c5",
+    measurementId: "G-QVWMJTRMC2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
+</script>
+
+ <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    .row { display: flex; gap: 8px; margin: 16px 0; }
+    input { flex: 1; padding: 12px; font-size: 16px; }
+    button { padding: 12px 16px; font-size: 16px; cursor: pointer; }
+    ul { list-style: none; padding: 0; margin-top: 16px; }
+    li { padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; }
+    .meta { color:#666; font-size: 12px; margin-top: 4px; }
+    .status { font-size: 14px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h1>메시지 보내기 (1번)</h1>
+  <a href="/">→ index 열기</a>
+  <div class="row">
+    <input id="messageInput" type="text" placeholder="메시지를 입력하세요" />
+    <button id="sendBtn" type="button">보내기</button>
+  </div>
+
+  <div class="status" id="status">연결 상태: <strong>연결 중…</strong></div>
+
+  <h2>메시지 목록</h2>
+  <ul id="messageList"></ul>
+
+<script defer src="./script.js"></script>
+<a href="./display.html">입력 화면</a>  <!-- 보기→입력 -->
+<a href="./index.html">보기 화면</a>    <!-- 입력→보기(루트라면 './'도 가능) -->
+
+</body>
+</html>
