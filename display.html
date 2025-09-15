@@ -1,54 +1,294 @@
 <!doctype html>
 <html lang="ko">
+
 <head>
   <meta charset="utf-8" />
-  <title>입력 페이지 (2번)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <title>公論紙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Yuji+Boku&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"> </script>
+  <script src="turn.js"></script>
+  <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
 
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDl-1zPFjsggpmQWEFyaR69amHoasniSDM",
-    authDomain: "awi-rewrite.firebaseapp.com",
-    projectId: "awi-rewrite",
-    storageBucket: "awi-rewrite.firebasestorage.app",
-    messagingSenderId: "618121283744",
-    appId: "1:618121283744:web:f4b7c436518a4b704d61c5",
-    measurementId: "G-QVWMJTRMC2"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDl-1zPFjsggpmQWEFyaR69amHoasniSDM",
+      authDomain: "awi-rewrite.firebaseapp.com",
+      projectId: "awi-rewrite",
+      storageBucket: "awi-rewrite.firebasestorage.app",
+      messagingSenderId: "618121283744",
+      appId: "1:618121283744:web:f4b7c436518a4b704d61c5",
+      measurementId: "G-QVWMJTRMC2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+  </script>
 
-  firebase.initializeApp(firebaseConfig);
-  window.db = firebase.firestore();
-</script>
+  <!-- <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
 
- <style>
-    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
-    .row { display: flex; gap: 8px; margin: 16px 0; }
-    input { flex: 1; padding: 12px; font-size: 16px; }
-    button { padding: 12px 16px; font-size: 16px; cursor: pointer; }
-    ul { list-style: none; padding: 0; margin-top: 16px; }
-    li { padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; }
-    .meta { color:#666; font-size: 12px; margin-top: 4px; }
-    .status { font-size: 14px; margin-top: 8px; }
-  </style>
+    .row {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+    }
+
+    li {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: #666;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .status {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  </style> -->
 </head>
+
 <body>
-  <h1>메시지 보내기 (1번)</h1>
-  <!-- <a href="/">→ index 열기</a> -->
-  <div class="row">
-    <input id="messageInput" type="text" placeholder="메시지를 입력하세요" />
-    <button id="sendBtn" type="button">보내기</button>
+  <!-- <div class="page cover">
+      <h1 class="page-title">제 1장.</h1>
+      <p style="text-align:center; margin-top:2rem;">시작하려면 페이지를 넘기세요</p>
+    </div> -->
+  <div id="flipbook">
+    <!-- 1. 포스터 페이지 -->
+    <div class="page cover" onmousemove="coverMove(event, this)">
+      <img src="/poster.png" alt="posterImage" />
+    </div>
+    <!-- 2. 배경 설명 페이지 -->
+    <!-- 3. 사용법 페이지 -->
+
+
+    <!-- 페이지1 -->
+    <div class="page">
+      <header class="page-header">
+        <div class="header-left">西江大學校</div>
+        <div class="header-center">Art with Impact</div>
+        <div class="header-right current-date"></div>
+      </header>
+      <div class="page-divider"></div>
+      <h1 class="page-title">公 論 紙</h1>
+      <div class="page-divider"></div>
+      <section class="page-subtitle">
+        "좋은 일자리라는 말만 믿었는데..."
+      </section>
+      <div class="page-body">
+        <span class="basicsentence" id="p1s1">1943년 어느 시골 마을에서 어린 소녀들을 대상으로 한 대규모 인력 모집이 이뤄졌다.</span>
+        <span class="basicsentence" id="p1s2">모집책들은 “따뜻한 일본 공장에서 안정적으로 일하며 숙식이 보장된다”는 조건을 내세웠다.</span>
+        <span class="basicsentence" id="p1s3">구인 대상은 주로 여성으로, 연령대를 불문하고 선발하였다.</span>
+        <span class="basicsentence" id="p1s4">대부분 가족들의 극심한 생계 문제를 해결하기 위해 지원하였으나,</span>
+        <span class="basicsentence" id="p1s5">영문도 모른 채 좁은 트럭에 실려 기차와 배로 장시간 강제 이동했다.</span>
+        <span class="basicsentence" id="p1s6">도착지에는 수백 명의 또래들이 집결해 있었지만 약속된 공장은 존재하지 않았다.</span>
+        <span class="basicsentence" id="p1s7">그 대신 열악한 천막과 임시 막사, 창고만이 기다리고 있었다.</span>
+        <span class="basicsentence" id="p1s8">군인들은 소녀들의 머리를 자르고 일본식 가짜 이름으로 호명했다.</span>
+        <span class="basicsentence" id="p1s9">이는 사실상 단순한 취업 사기가 아닌 조직적 강제 동원으로 드러났다.</span>
+      </div>
+      <footer class="page-footer">
+        <div class="page-divider"></div>
+        <div class="footer-center">公論紙</div>
+      </footer>
+    </div>
+
+    <!-- 페이지2 -->
+    <div class="page">
+      <header class="page-header">
+        <div class="header-left">西江大學校</div>
+        <div class="header-center">Art with Impact</div>
+        <div class="header-right current-date"></div>
+      </header>
+      <div class="page-divider"></div>
+      <h1 class="page-title">公 論 紙</h1>
+      <div class="page-divider"></div>
+      <section class="page-subtitle">
+        폭력으로 얼룩진 위안소의 진실
+      </section>
+      <div class="page-body">
+        <span class="basicsentence" id="p2s1">강제 동원된 여성들은 도착 직후 군 위안소로 강제로 배치된 것으로 확인됐다.</span>
+        <span class="basicsentence" id="p2s2">위안소 내부에는 일본군 병사들이 줄을 서서 순번을 기다리고 있었으며,</span>
+        <span class="basicsentence" id="p2s3">좁고 허름한 방 구조 속에서는 도망치는 것이 사실상 불가능했다.</span>
+        <span class="basicsentence" id="p2s4">피해자들은 저항할 경우 무차별적인 폭행과 협박을 당한 것으로 조사됐다.</span>
+        <span class="basicsentence" id="p2s5">지시에 불응한 피해자들은 반복적으로 심각한 구타를 당한 것으로 알려졌다.</span>
+        <span class="basicsentence" id="p2s6">일부 피해자는 몸에 칼자국과 상처가 남을 정도로 심각한 피해를 입은 것으로 전해졌다.</span>
+        <span class="basicsentence" id="p2s7">피해자들이 지낸 위안소는 매우 열악한 환경으로, 하루에도 수십 명의 병사를 상대해야 했다.</span>
+        <span class="basicsentence" id="p2s8">피해자들은 제대로 된 치료조차 받지 못한 채 지속적으로 폭력에 노출된 것으로 드러났다.</span>
+      </div>
+      <footer class="page-footer">
+        <div class="page-divider"></div>
+        <div class="footer-center">公論紙</div>
+      </footer>
+    </div>
+
+    <!-- 페이지 3 -->
+    <div class="page">
+      <header class="page-header">
+        <div class="header-left">西江大學校</div>
+        <div class="header-center">Art with Impact</div>
+        <div class="header-right current-date"></div>
+      </header>
+      <div class="page-divider"></div>
+      <h1 class="page-title">公 論 紙</h1>
+      <div class="page-divider"></div>
+      <section class="page-subtitle">
+        돌아온 이들이 마주한 냉대
+      </section>
+      <div class="page-body">
+        <span class="basicsentence" id="p3s1">1945년 해방 직후 일부 여성들은 어렵게 고향으로 돌아온 것으로 확인됐다.</span>
+        <span class="basicsentence" id="p3s2">그러나 예상과는 달리 이들은 사회의 환영을 받지 못하고 오히려 사회적 냉대에 직면했다.</span>
+        <span class="basicsentence" id="p3s3">일부 피해자의 가족들은 피해 사실을 부정하거나 감추려 한 것으로 드러났다.</span>
+        <span class="basicsentence" id="p3s4">뿐만 아니라 사회적으로 귀향한 여성에게 모욕을 가하거나</span>
+        <span class="basicsentence" id="p3s5">피해자가 아닌 일본군과 협력적인 관계였던 이해관계자로 낙인찍은 사례도 보고되었다.</span>
+        <span class="basicsentence" id="p3s6">피해자들이 피해 사실을 밝히더라도 그들의 편에서 이야기를 들어주는 경우는 드물었으며,</span>
+        <span class="basicsentence" id="p3s7">이 같은 배제는 피해자들이 피해 사실을 밝히지 못하고 결국 홀로 고통을 감내하게 만드는 상황을 초래했다.</span>
+        <span class="basicsentence" id="p3s8">일부 여성들은 마을을 떠나 외로운 유랑 생활을 이어가기도 했으며,</span>
+        <span class="basicsentence" id="p3s9">이러한 사회적 낙인은 피해자에게 평생 지워지지 않는 상처로 남았다.</span>
+      </div>
+      <footer class="page-footer">
+        <div class="page-divider"></div>
+        <div class="footer-center">公論紙</div>
+      </footer>
+    </div>
+    <!-- 페이지 4 -->
+    <div class="page">
+      <header class="page-header">
+        <div class="header-left">西江大學校</div>
+        <div class="header-center">Art with Impact</div>
+        <div class="header-right current-date"></div>
+      </header>
+      <div class="page-divider"></div>
+      <h1 class="page-title">公 論 紙</h1>
+      <div class="page-divider"></div>
+      <section class="page-subtitle">
+        여전히 부재한 진심 어린 사과
+      </section>
+      <div class="page-body">
+        <span class="basicsentence" id="p4s1">1990년대 들어 한국 정부가 피해 신고를 공식 접수한 사실이 확인됐다.</span>
+        <span class="basicsentence" id="p4s2">일본 정부는 강제 동원 사실을 부인하며 법적 책임을 회피한 것으로 나타났다.</span>
+        <span class="basicsentence" id="p4s3">일부 정치 지도자들은 사과 발언을 번복하거나 부정적인 태도를 보이기도 했다.</span>
+        <span class="basicsentence" id="p4s4">학계 일각에서는 피해자를 매춘부로 규정하는 왜곡이 발견돼 큰 논란이 일었다.</span>
+        <span class="basicsentence" id="p4s5">피해자들은 존엄 회복을 위해 다양한 자리에서 증언을 이어가고 있다.</span>
+        <span class="basicsentence" id="p4s6">그러나 이미 많은 피해자들은 고령에 이르러 현 세대의 관심과 지원이 절실한 상황이다.</span>
+        <span class="basicsentence" id="p4s7">이를 위해 국내뿐만 아니라 일본의 역사 단체들도 역사적 왜곡을 중단하기 위한 노력을 이어가고 있다.</span>
+        <span class="basicsentence" id="p4s8">국제 사회에서도 사죄와 배상 요구가 지속적으로 제기되고 있음에도 불구하고, 일본 정부의 공식적이고 진정성 있는 사과는 끝내 이루어지지
+          않았다.</span>
+      </div>
+      <footer class="page-footer">
+        <div class="page-divider"></div>
+        <div class="footer-center">公論紙</div>
+      </footer>
+    </div>
+
+
+    <!-- 최종 힌트 페이지 -->
+
+    <div class="page">
+
+    </div>
+
   </div>
 
-  <div class="status" id="status">연결 상태: <strong>연결 중…</strong></div>
+  </div>
 
-  <h2>메시지 목록</h2>
-  <ul id="messageList"></ul>
 
-<script defer src="./script.js"></script>
-<!-- <a href="./display.html">입력 화면</a>  보기→입력 -->
-<a href="./index.html">보기 화면</a>    <!-- 입력→보기(루트라면 './'도 가능) -->
+  <script>
+    $(document).ready(function () {
+      const h = $(window).height();
+      const w = h * (9 / 16);  // 비율 9:16 맞춤
+
+      $("#flipbook").turn({
+        display: 'single',
+        width: w,
+        height: h,
+        autoCenter: true
+      });
+
+    });
+  </script>
+  <script defer src="./script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const dateStr = `${yyyy}年 ${mm}月 ${dd}日`;
+
+      document.querySelectorAll(".current-date").forEach(el => {
+        el.textContent = dateStr;
+      });
+    });
+  </script>
+
+  <script>
+    // 좌↔우로 방향 전환이 3번 발생하면 다음 페이지
+    function coverMove(e, el) {
+      var x = e.clientX;
+      var prev = (el._prevX !== undefined) ? el._prevX : x;
+      var dir = el._dir || '';
+      var ndir = (x > prev) ? 'R' : (x < prev) ? 'L' : dir;
+
+      // 너무 미세한 떨림은 무시 (임계값 px)
+      var THRESH = 12;
+
+      if (ndir !== dir && Math.abs(x - prev) > THRESH) {
+        el._swings = (el._swings || 0) + 1;
+        if (el._swings >= 5) {
+          $("#flipbook").turn("next");
+          el.onmousemove = null; // 한 번만 동작
+          return;
+        }
+      }
+
+      el._dir = ndir;
+      el._prevX = x;
+    }
+  </script>
+
 
 </body>
+
 </html>

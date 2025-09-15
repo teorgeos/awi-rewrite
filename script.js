@@ -53,3 +53,8 @@ ref.onSnapshot(
   },
   (err) => console.error("onSnapshot error:", err)
 );
+
+
+
+// 프론트엔드 관련 코드들
+

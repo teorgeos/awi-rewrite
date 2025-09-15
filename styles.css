@@ -1,0 +1,259 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
+@font-face {
+  font-family: 'myFont';            
+  src: url('font/myFont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+	font-family: 'Song Myung', serif;
+}
+
+body {
+    display: grid;
+    place-content: center;
+    height:
+    /* height: 100vh;
+    width: 100vw; */
+	overflow: hidden;
+	/* background: #f1c40f; */
+  background: #DDDEE0;
+}
+
+#flipbook {
+    /* width: calc(100vh * 2 / 3);
+    height: 100vh; */
+    overflow:hidden;       
+    position:relative;     
+    background:#DDDEE0;
+
+}
+
+/* .flipbook .hard {
+    background: #c0392b !important;
+    color: #fff;
+    font-weight: bold;
+    border: none; 
+}
+
+.flipbook .hard small{
+	font-style: italic;
+	font-weight: lighter;
+	opacity: 0.7;
+	font-size: 14px;
+} */
+
+#flipbook .turn-page{
+    background: #DDDEE0;
+    /* background: url("img/background.png"); */
+    background-size: cover;
+}
+#flipbook .page {
+    background: #DDDEE0;
+    /* background: url("img/background.png"); */
+    background-size: cover;
+
+	/* justify-content: center;
+	align-items: center; */
+    gap: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+
+    display: flex;
+	  flex-direction: column;
+    height: 100%;
+}
+
+
+
+/* 
+.page-content{
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  gap:10px; padding:16px; box-sizing:border-box;
+} */
+
+/* .page img{
+	width: 70%;
+	object-fit: cover;
+	margin: auto;
+} */
+
+/* .flipbook .page small{
+	font-size: 14px;
+    margin-bottom: 10px;
+} */
+
+
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 2vh;
+    padding: 1rem 1rem 0rem 1rem;  
+}
+
+.page-divider {
+  height: 0px;
+   border-top: 1.5px solid #1A110C;
+  background-color: #1A110C;
+  margin: 0 20px; 
+}
+
+.page-title{
+  font-family: 'Yuji Boku';
+  /* background-color: #1A110C;  */
+  /* color: white;              흰색 글자 */
+  text-align: center;        /* 가운데 정렬 */
+  font-size: 10vh;            /* 제목 크기 */
+  font-weight: 700;
+  /* padding: 0px 0px;           위아래 여백 */
+  /* margin: 10px 0px;       바깥 여백 */
+  /* font-family: 'Noto Serif KR', serif; */
+  letter-spacing: 2px;      
+}
+
+/* .page-image {
+  width: auto;
+  display: flex;
+  justify-content: center;  
+  margin: 0 20px; 
+  box-sizing: border-box;
+}
+
+.page-image img {
+
+  width: 100%;
+  height: auto;       
+  display: block;
+
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+
+.page-image img.fading {
+  opacity: 0;  
+} */
+
+.page-subtitle {
+  text-align: center;
+  font-size: 3.5vh;
+  font-weight: bold;
+  margin: 3vh 0 3vh 0;
+}
+
+/* .page-body{
+  width: 100%;
+
+  font-size: 2.2vh;
+  line-height: 1.7;
+  text-align: justify;
+  word-break: keep-all;
+  padding: 0rem 1rem 0rem 1rem;  
+} */
+
+.page-body{
+  flex: 1 1 auto;          /* 본문이 중간 영역을 차지하도록 */
+  min-height: 0;           /* Firefox/Chromium에서 스크롤 막힘 방지 포인트 */
+  overflow: auto;          /* 본문만 스크롤 */
+  padding: 0 1rem;         /* 기존 패딩 유지 */
+  font-size: 2.2vh;
+  line-height: 1.7;
+  text-align: justify;
+  word-break: keep-all;
+  /* 선택: iOS 부드러운 스크롤 */
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* app.js가 생성 */
+.sentence{
+  font-family: "Gowun Batang", serif;
+  font-weight: 400;
+  display: inline;
+  margin-right: 6px;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+/* .sentence:focus{ outline: 1px dashed #888; } */
+.sentence.distorting{
+  /* color: #B90705; */
+  font-family: "Gowun Batang", serif;
+  font-weight: 700;
+  /* text-decoration: underline wavy rgba(185,7,5,.6) 1.5px; */
+/* double, wavy */
+}
+.sentence[contenteditable="true"] {
+  outline: none;   /* 기본 테두리 제거 */
+  caret-color: black; /* 커서 색상 지정 (없애려면 transparent) */
+}
+/* 액션 박스 / 버튼 */
+/* .action-box{
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6vh;
+}
+.action-btn{
+  padding: 1vh 2vw;
+  font-size: 1.8vh;
+  border: none;
+  border-radius: 6px;
+  background-color: #1A110C;
+  color: #fff;
+  cursor: pointer;
+}
+.action-btn:disabled{
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+} */
+
+/* 문장 옆 인라인 아이콘 버튼 */
+.action-btn-inline{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  /* margin-left: 6px; */
+  padding: 0;
+  margin-right: 0.5em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  /* vertical-align: middle; 문장과 기준선 맞추기 */
+}
+
+.action-btn-inline:disabled{
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.action-btn-inline i{
+  font-size: 16px;
+  transition: transform .15s ease, color .2s ease, opacity .2s ease;
+}
+
+.action-btn-inline:active i{
+  color: yellow; /* 누르고 있는 동안만 노랑 */
+}
+
+
+/* 페이지 하단(선택) */
+.page-footer
+{margin-top:auto; margin-bottom:10px; }
+.footer-center{
+  text-align: center;
+  font-size: 2vh;
+}
+
+
+.sentence[contenteditable="true"] {
+  /* margin-top:auto; margin-bottom:10px;  */
+  outline: none;   /* 기본 테두리 제거 */
+  caret-color: black; /* 커서 색상 지정 (없애려면 transparent) */
+}
