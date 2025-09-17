@@ -21,9 +21,9 @@ function addRow(ul, text, ts) {
 
   // 1) 종이 텍스처 후보 (프로젝트에 있는 PNG 이름으로 맞춰줘)
   const papers = [
-    '/paper1.png','/paper2.png','/paper3.png','/paper4.png',
-    '/paper5.png','/paper6.png','/paper7.png','/paper8.png',
-    '/paper9.png','/paper10.png','/paper11.png','/paper12.png'
+    './paper1.png','./paper2.png','./paper3.png','./paper4.png',
+    './paper5.png','./paper6.png','./paper7.png','./paper8.png',
+    './paper9.png','./paper10.png','./paper11.png','./paper12.png'
   ];
   const pick = () => papers[Math.floor(Math.random()*papers.length)];
 
