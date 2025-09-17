@@ -100,11 +100,11 @@
       <img src="/poster.png" alt="posterImage" />
     </div>
     <!-- 2. 배경 설명 페이지 -->
-    <!-- 3. 사용법 페이지 -->
-
-
+         <div class="page2" >
+         </div>
+   
     <!-- 페이지1 -->
-    <div class="page">
+    <div class="page page3">
       <header class="page-header">
         <div class="header-left">西江大學校</div>
         <div class="header-center">Art with Impact</div>
@@ -134,7 +134,7 @@
     </div>
 
     <!-- 페이지2 -->
-    <div class="page">
+    <div class="page page4">
       <header class="page-header">
         <div class="header-left">西江大學校</div>
         <div class="header-center">Art with Impact</div>
@@ -163,7 +163,7 @@
     </div>
 
     <!-- 페이지 3 -->
-    <div class="page">
+    <div class="page page5">
       <header class="page-header">
         <div class="header-left">西江大學校</div>
         <div class="header-center">Art with Impact</div>
@@ -192,7 +192,7 @@
       </footer>
     </div>
     <!-- 페이지 4 -->
-    <div class="page">
+    <div class="page page6">
       <header class="page-header">
         <div class="header-left">西江大學校</div>
         <div class="header-center">Art with Impact</div>
@@ -224,8 +224,10 @@
 
     <!-- 최종 힌트 페이지 -->
 
-    <div class="page">
-
+    <div class="page page7">
+      고쳐쓰기를 하는 동안, 당신은 기자의 입장에서 작성했나요 아니면 소녀의 이야기에 더욱 몰입하게 되었나요?
+      '소녀'의 이야기는 단순히 일본군'위안부'피해의 역사 속에서만 머물지 않습니다. 무력감과 두려움, 분노. 당신도 '소녀'와 같은 감정을 겪은 일은 없나요? 
+      오늘 작성한 진실의 문장은 단순히 소녀의 경험이 아닌 누군가가 부정하는 어쩌면 현대의 또다른 소녀들을 위한 문장들이에요. 그래서 우리는, 이 문장들을 계속해 지켜나갈 수 있는 '진실의 말' 보관함을 디지털에서 구현했어요. 자물쇠의 비밀번호는 희움'일본군'위안부역사관의 개관일이에요. 비밀번호를 열어, 디지털 보관함에 갈 수 있는 키를 얻어보세요.
     </div>
 
   </div>
@@ -288,6 +290,329 @@
     }
   </script>
 
+  <script>
+    // === 페이지별 왜곡 설정 ===
+    // targetId: 왜곡을 "옆에" 붙일 원문 span의 id (p{page}s{slot})
+    // text: 타자 효과로 등장할 왜곡 문장
+    const PLAN = {
+      1: { targetId: 'p1s3', text: '111' },
+      2: { targetId: 'p2s5', text: '3435' },
+      3: { targetId: 'p3s7', text: '405305353' },
+      4: { targetId: 'p4s4', text: '1304915' } // 4페이지는 p4s4에 붙임
+    };
+
+    const DELAY_MS = 5000;          // 5초
+    const timers = new Map();       // 페이지별 예약 타이머
+    const done = new Set();       // 이미 실행된 페이지(중복 방지)
+
+    // 원문 옆에 ghost(왜곡) + 편집 버튼 붙이고, 타자 효과 시작
+    function typeAndEnableEdit(targetId, text) {
+      const anchor = document.getElementById(targetId);
+      if (!anchor) return;
+
+      // 중복 삽입 방지
+      if (anchor.dataset.distortionAttached === '1') return;
+      anchor.dataset.distortionAttached = '1';
+
+      // 1) 원문 뒤에 ghost 스팬 삽입
+      const ghost = document.createElement('span');
+      ghost.className = 'distorting';
+      ghost.textContent = '';
+      anchor.insertAdjacentElement('afterend', ghost);
+
+      // 2) 편집 버튼
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'action-btn-inline';
+      btn.textContent = '수정';
+      ghost.insertAdjacentElement('afterend', btn);
+
+      // 3) 타자 효과
+      const tw = new Typewriter(ghost, { autoStart: false, delay: 40, cursor: '|' });
+      tw.typeString(text).start();
+
+      // 4) 인라인 편집 진입
+      function enterEdit() {
+        // 타자 커서 제거
+        const cursor = ghost.parentNode.querySelector('.Typewriter__cursor');
+        if (cursor) cursor.remove();
+
+        ghost.contentEditable = 'true';
+        ghost.focus();
+        btn.textContent = '저장';
+        btn.disabled = ghost.textContent.trim().length < 10;
+
+        const onInput = () => {
+          btn.disabled = ghost.textContent.trim().length < 10;
+        };
+        ghost.addEventListener('input', onInput);
+
+        btn.onclick = async () => {
+  const edited = ghost.textContent.trim();
+  if (edited.length < 10) return;
+
+  // 1. 원문(anchor) 교체
+  anchor.textContent = edited;
+
+  // 2. Firestore에 저장해서 index.html / display.html 리스트에도 남기기
+  try {
+    await firebase.firestore().collection("sentences").add({
+      text: edited,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  } catch (err) {
+    console.error("저장 실패:", err);
+  }
+
+  // 3. 편집 UI 정리
+  ghost.remove();
+  btn.remove();
+};
+
+      }
+
+      ghost.onclick = enterEdit;
+      btn.onclick = (e) => { e.stopPropagation(); enterEdit(); };
+    }
+
+    // 해당 페이지에 대한 타이머 예약
+    function scheduleFor(pageNum) {
+      if (!PLAN[pageNum] || done.has(pageNum) || timers.has(pageNum)) return;
+
+      const t = setTimeout(() => {
+        const { targetId, text } = PLAN[pageNum];
+        typeAndEnableEdit(targetId, text);
+        done.add(pageNum);
+        timers.delete(pageNum);
+      }, DELAY_MS);
+
+      timers.set(pageNum, t);
+    }
+
+    // === turn.js 초기화 아래에서 호출 ===
+    $(function () {
+      // 현재 보이는 페이지 예약
+      scheduleFor($("#flipbook").turn("page"));
+
+      // 페이지가 보일 때마다 예약
+      $("#flipbook").bind("turned", function (_e, page) {
+        scheduleFor(page);
+      });
+    });
+  </script>
+<style>
+  #flipbook .page2 {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 16px;
+    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    min-height: 240px;
+    position: relative;
+    padding: 0;
+    overflow: auto;
+  }
+  #flipbook .page2.typing::after {
+    content: "▎";
+    display: inline-block;
+    animation: blink 1s steps(1) infinite;
+    vertical-align: baseline;
+    margin-left: 2px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+<!-- 
+<script>
+(function(){
+  const container = document.querySelector('#flipbook .page2');
+  if (!container) { console.error('타겟 요소 #flipbook .page2 없음'); return; }
+
+  const paragraphs = [
+`안녕하세요.
+우리 공론지의 기자 역할에 지원해주셔서 감사합니다.
+먼저, 우리가 왜 당신을 필요로 하는지 이야기해드릴게요.`,
+
+`공론지는 공개적으로 열려 있는 의견을 전하는 신문입니다.
+즉, 누구나 문장을 수정하고 정정하는 데 참여할 수 있죠.
+
+이 역할은 시대마다 다른 방식으로 존재했어요.
+
+말을 직접 전달하던 시대에는 소식을 전하는 사람이 필요했고,
+인쇄술이 발달한 시대에는 인쇄공이 필요했으며,
+근대 이후에는 신문을 제작하는 기자가 필요했어요.`,
+
+`그리고 2025년, 우리는 또 다른 흐름을 따르기로 했습니다.
+휴대폰과 노트북 어디에서든 실시간으로 메시지를 볼 수 있는 시대죠.`,
+
+`하지만 문제도 생겼습니다.
+실시간으로 메시지를 전달하는 만큼, 거짓된 문장들이 끼어들어 우리의 메시지를 오염시키고 있어요.`,
+
+`그래서 지금의 공론지는 누군가가 계속해서 이 오염된 문장을 진실로 고쳐 써주는 일을 필요로 합니다.
+그 누가 바로 당신이에요.`,
+
+`‘고쳐쓰기’는 아주 간단합니다.
+
+1. 각 페이지가 열리면, 오염된 문장이 나타납니다.
+2. 문장 옆의 버튼을 눌러 새로운 문장으로 덮어씁니다.
+3. 저장 버튼을 누르면 끝!
+
+이렇게 총 4개의 페이지를 수정해주세요.
+
+그렇다면, 어떻게 문장을 고쳐 써야 할까요?`,
+
+`우리 공론지는 세상에 존재하는 수많은 이들을 위해 존재하고,
+그들의 진실을 근거로 새로운 문장을 만들어내고 있어요.
+
+당신 앞에 놓인 ‘소녀’의 일기가 바로 그 힌트입니다.
+그 일기를 열어보면 새로운 문장을 써낼 단서들을 얻을 수 있습니다.`,
+
+`결국 우리는 이 ‘소녀’의 진실된 이야기를 지켜내고,
+그 이야기를 모두와 함께 공유하기 위해 만들어진 신문이에요.
+소녀가 누구인지는, 직접 ‘고쳐쓰기’를 하면서 자연스럽게 알게 될 거예요.`,
+
+`자, 준비가 되셨다면,
+이제 페이지 모서리를 마우스로 잡아 당겨 넘겨주세요!`
+  ];
+
+  // ===== 조절 파라미터 =====
+  const TYPE_DELAY       = 80;    // 글자당 타이핑 속도(ms)
+  const SENTENCE_PAUSE   = 500;   // 문장 끝(. ? !) 뒤 추가 대기(ms)
+  const PARAGRAPH_HOLD   = 1000;  // 문단 타이핑 완료 후 대기(ms)
+  const ERASE_ALL_STEP   = 8;     // 전체 삭제 시 한 번에 지울 문자 수
+  const ERASE_ALL_DELAY  = 8;     // 전체 삭제 속도(ms/스텝)
+  const AUTO_SCROLL      = true;  // 타이핑 중 자동 스크롤
+
+  // “그 누가 바로 당신이에요.” 문단(= index 4)까지 타이핑 후 싹 지우고,
+  // 다음 문단(= index 5, ‘고쳐쓰기’는 아주 간단합니다)부터 다시 시작
+  const RESTART_AFTER_INDEX = 4;   // 0 기반 index
+
+  const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+  async function typeAppend(el, text, addLeadingBlankLine = true) {
+    el.classList.add('typing');
+
+    // 문단 사이 공백 줄 추가
+    if (el.textContent.trim().length > 0 && addLeadingBlankLine) {
+      el.textContent += '\n\n';
+    }
+
+    for (let i = 0; i < text.length; i++) {
+      el.textContent += text[i];
+
+      // 문장부호 뒤엔 잠깐 더 쉬기
+      if (/[.?!]/.test(text[i])) {
+        await sleep(SENTENCE_PAUSE);
+      } else {
+        await sleep(TYPE_DELAY);
+      }
+
+      if (AUTO_SCROLL) el.scrollTop = el.scrollHeight;
+    }
+
+    el.classList.remove('typing');
+  }
+
+  async function eraseAll(el) {
+    el.classList.add('typing');
+    while (el.textContent.length > 0) {
+      el.textContent = el.textContent.slice(0, Math.max(0, el.textContent.length - ERASE_ALL_STEP));
+      await sleep(ERASE_ALL_DELAY);
+    }
+    el.classList.remove('typing');
+  }
+
+  (async function run() {
+    // 1) “바로 당신이에요.”(index 4)까지 이어서 타이핑
+    for (let i = 0; i <= RESTART_AFTER_INDEX; i++) {
+      await typeAppend(container, paragraphs[i], true);
+      await sleep(PARAGRAPH_HOLD);
+    }
+
+    // 2) 전부 싹 지우기
+    await eraseAll(container);
+    await sleep(250);
+
+    // 3) ‘고쳐쓰기’ 문단(index 5)부터 끝까지 다시 타이핑
+    for (let i = RESTART_AFTER_INDEX + 1; i < paragraphs.length; i++) {
+      await typeAppend(container, paragraphs[i], (i !== RESTART_AFTER_INDEX + 1));
+      await sleep(PARAGRAPH_HOLD);
+    }
+  })();
+})();
+</script> -->
+
+
+
+<script>function startPage2Typing() {
+  const page2 = document.querySelector('#flipbook .page2');
+  if (!page2) return;
+  
+  // 이미 타이핑이 시작된 경우 중복 실행 방지
+  if (page2.dataset.typingStarted === 'true') return;
+  page2.dataset.typingStarted = 'true';
+  
+  // 원본 텍스트 저장
+  const originalText = `안녕하세요.
+우리 공론지의 기자 역할에 지원해주셔서 감사합니다.
+먼저, 우리가 왜 당신을 필요로 하는지 이야기해드릴게요.
+
+공론지는 공개적으로 열려 있는 의견을 전하는 신문입니다.
+즉, 누구나 문장을 수정하고 정정하는 데 참여할 수 있죠.
+
+이 역할은 시대마다 다른 방식으로 존재했어요.
+
+말을 직접 전달하던 시대에는 소식을 전하는 사람이 필요했고,
+인쇄술이 발달한 시대에는 인쇄공이 필요했으며,
+근대 이후에는 신문을 제작하는 기자가 필요했어요.
+
+그리고 2025년, 우리는 또 다른 흐름을 따르기로 했습니다.
+휴대폰과 노트북 어디에서든 실시간으로 메시지를 볼 수 있는 시대죠.
+
+하지만 문제도 생겼습니다.
+실시간으로 메시지를 전달하는 만큼, 거짓된 문장들이 끼어들어 우리의 메시지를 오염시키고 있어요.
+
+그래서 지금의 공론지는 누군가가 계속해서 이 오염된 문장을 진실로 고쳐 써주는 일을 필요로 합니다.
+그 누가 바로 당신이에요.
+
+‘고쳐쓰기’는 아주 간단합니다.
+
+1. 각 페이지가 열리면, 오염된 문장이 나타납니다.
+2. 문장 옆의 버튼을 눌러 새로운 문장으로 덮어씁니다.
+3. 저장 버튼을 누르면 끝!
+
+이렇게 총 4개의 페이지를 수정해주세요.
+
+그렇다면, 어떻게 문장을 고쳐 써야 할까요?
+
+우리 공론지는 세상에 존재하는 수많은 이들을 위해 존재하고,
+그들의 진실을 근거로 새로운 문장을 만들어내고 있어요.
+
+당신 앞에 놓인 ‘소녀’의 일기가 바로 그 힌트입니다.
+그 일기를 열어보면 새로운 문장을 써낼 단서들을 얻을 수 있습니다.
+
+결국 우리는 이 ‘소녀’의 진실된 이야기를 지켜내고,
+그 이야기를 모두와 함께 공유하기 위해 만들어진 신문이에요.
+소녀가 누구인지는, 직접 ‘고쳐쓰기’를 하면서 자연스럽게 알게 될 거예요.
+
+자, 준비가 되셨다면,
+이제 페이지 모서리를 마우스로 잡아 당겨 넘겨주세요!`;
+
+  
+  // 텍스트 초기화 후 타이핑 시작
+  page2.textContent = '';
+  page2.classList.add('typing');
+  
+  let i = 0;
+  const typeInterval = setInterval(() => {
+    page2.textContent = originalText.substring(0, i + 1);
+    i++;
+    
+    // 타이핑 완료
+    if (i >= originalText.length) {
+      clearInterval(typeInterval);
+      page2.classList.remove('typing');
+    }
+  }, 100); // 타이핑 속도 조절 (숫자가 작을수록 빠름)
+}</script>
 
 </body>
 

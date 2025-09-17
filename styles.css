@@ -48,13 +48,13 @@ body {
 } */
 
 #flipbook .turn-page{
-    background: #DDDEE0;
-    /* background: url("img/background.png"); */
+    /* background: #DDDEE0; */
+    background: url("/background.png");
     background-size: cover;
 }
 #flipbook .page {
     background: #DDDEE0;
-    /* background: url("img/background.png"); */
+     background: url("/background.png");
     background-size: cover;
 
 	/* justify-content: center;
@@ -256,4 +256,59 @@ body {
   /* margin-top:auto; margin-bottom:10px;  */
   outline: none;   /* 기본 테두리 제거 */
   caret-color: black; /* 커서 색상 지정 (없애려면 transparent) */
+}
+
+/* 왜곡 텍스트가 원문 옆에 붙도록 */
+.distorting { display: inline; font-weight: 700; margin-left: .25em; }
+
+/* 인라인 편집/저장 버튼 */
+.action-btn-inline {
+  display: inline-block;
+  margin-left: .25em;
+  padding: 2px 6px;
+  border: 0;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.action-btn-inline:disabled { opacity: .4; cursor: default; }
+
+
+
+
+/* 종이보드 컨테이너 전체 화면 */
+#messageList, #displayList {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+/* 각 종이카드(li) 공통 스타일 */
+.paper-card {
+  position: absolute;
+  list-style: none;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  /* box-shadow: 0 6px 24px rgba(0,0,0,.15); */
+  padding: 18px 20px; /* 텍스트 여백 */
+  transform-origin: center center;
+  word-break: keep-all;
+  white-space: normal;
+}
+
+/* 본문 텍스트와 메타는 카드 안에 배치 */
+.paper-card .msg {
+  font-size: clamp(14px, 2.2vh, 22px);
+  line-height: 1.35;
+}
+.paper-card .meta {
+  color: #666;
+  font-size: 12px;
+  margin-top: 8px;
 }
