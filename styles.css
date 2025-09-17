@@ -49,12 +49,12 @@ body {
 
 #flipbook .turn-page{
     /* background: #DDDEE0; */
-    background: url("/background.png");
+    background: url("img/background.png");
     background-size: cover;
 }
 #flipbook .page {
     background: #DDDEE0;
-     background: url("/background.png");
+     background: url("img/background.png");
     background-size: cover;
 
 	/* justify-content: center;
