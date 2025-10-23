@@ -95,7 +95,14 @@ body {
   justify-content: space-between;
   font-size: 2vh;
     padding: 1rem 1rem 0rem 1rem;  
+    height: 40px;
 }
+
+.header-left img {
+  height: 90%; /* 부모 높이에 맞게 이미지 크기 조정 */
+  object-fit: contain; /* 비율 유지 */
+}
+
 
 .page-divider {
   height: 0px;
