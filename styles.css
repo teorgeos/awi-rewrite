@@ -319,3 +319,27 @@ body {
   font-size: 12px;
   margin-top: 8px;
 }
+
+.archive-title {
+  text-align: center;
+  font-size: 3.5vh;
+  font-weight: bold;
+  margin: 1vh 0 1vh 0;
+}
+
+
+.archive-subtitle {
+  text-align: center;
+  font-size: 2vh;
+  font-weight: bold;
+  margin: 1vh 0 3vh 0;
+}
+
+.basicsentence {
+  font-family: "Gowun Batang", serif;
+  font-weight: 400;
+  display: inline;
+  margin-right: 6px;
+  cursor: pointer;
+  transition: color .2s ease;
+}
