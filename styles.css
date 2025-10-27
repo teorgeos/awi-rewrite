@@ -381,31 +381,63 @@ body {
   font-family: "Gowun Batang", serif;
 }
 
-.hintpage
+
+/* hint가 꽉 차게 나와서, 아래 코드로 바꿈 */
+/* .hintpage
 {
   display: flex;
-  flex-direction: column;   /* 문장 위, 이미지 아래 세로 배치 */
-  align-items: center;      /* 수평 가운데 정렬 */
+  flex-direction: column;   
+  align-items: center;     
   justify-content: center;
-  margin-top: 35%;          /* 페이지 위에서 조금 내리기 */
+  margin-top: 35%;          
   text-align: center;
   gap: 2vh;              
 }
-/* 이미지들을 감싸는 래퍼 */
+
 .hintnumber {
   display: flex;
-  justify-content: space-between;  /* 좌우로 균등 배치 */
+  justify-content: space-between;  
   align-items: center;
-  width: 80%;                      /* 전체 폭의 80%만 차지 */
-  gap: 1vw;                        /* 간격 아주 조금 */
+  width: 80%;                      
+  gap: 1vw;                       
 }
 
-/* 실제 이미지 스타일 */
+
 .hintnumber img {
-  flex: 1;                  /* 세 개가 자동으로 3등분 */
-  max-width: 30%;           /* 각 이미지 최대 폭 제한 */
+  flex: 1;                
+  max-width: 30%;           
   height: auto;
-  object-fit: contain;      /* 비율 유지 */
+  object-fit: contain;      
   transition: opacity 0.4s ease;
   cursor: pointer;
+} */
+
+.hintpage{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:2vh;
+  margin-top:25vh;          /* 상단 여백 조금 */
+}
+
+/* 3등분 그리드 */
+.hintnumber{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: min(1.6vw, 14px);
+  width: min(90%, 680px);   /* 가운데 정렬 + 최대폭 제한 */
+  margin: 0 auto;
+  align-items:center;
+}
+
+/* 이미지를 셀 안에 맞추기 */
+.hintnumber img{
+  width: 100%;
+  height: auto;
+  max-height: 24vh;        /* 너무 커지는 것 방지 */
+  object-fit: contain;     /* 비율 유지해서 맞추기 */
+  display:block;
+  transition: opacity .3s ease;
+  cursor:pointer;
 }
