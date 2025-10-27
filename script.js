@@ -4,6 +4,17 @@ const sendBtn   = document.getElementById("sendBtn");
 const list1El   = document.getElementById("messageList");   // index.html
 const list2El   = document.getElementById("displayList");   // display.html
 
+
+const FONT_CLASSES = [
+  "sunflower-light",
+  "poor-story-regular",
+  "dokdo-regular",
+  "east-sea-dokdo-regular",
+  "gaegu-regular",
+  "gowun-batang-regular"
+];
+
+
 // // 안전하게 리스트에 추가
 // function addRow(ul, text, ts) {
 //   if (!ul) return;
@@ -35,6 +46,13 @@ function addRow(ul, text, ts) {
   li.className = 'paper-card';
   msg.className = 'msg';
   meta.className = 'meta';
+
+  //텍스트
+  const fontIdx = Number(ul.dataset.fontIdx || 0);
+  msg.classList.add(FONT_CLASSES[fontIdx]);
+  ul.dataset.fontIdx = (fontIdx + 1) % FONT_CLASSES.length;
+
+
 
   msg.textContent = text;
   meta.textContent = ts ? `시간: ${ts}` : '';
@@ -140,3 +158,4 @@ $("#flipbook").bind("turned", function (e, page) {
 
 // 초기 페이지도 확인하고 싶으면
 console.log("초기 현재 페이지:", $("#flipbook").turn("page"));
+

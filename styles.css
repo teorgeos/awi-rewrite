@@ -224,7 +224,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px; height: 20px;
+  width: 1.25em; height: 1.25em;
   /* margin-left: 6px; */
   padding: 0;
   margin-right: 0.5em;
@@ -232,8 +232,24 @@ body {
   border: none;
   cursor: pointer;
   color: black;
+  line-height: 1;
   /* vertical-align: middle; 문장과 기준선 맞추기 */
 }
+
+
+/* 인라인 편집/저장 버튼 */
+/* .action-btn-inline {
+  display: inline-block;
+  margin-left: .25em;
+  padding: 2px 6px;
+  border: 0;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.action-btn-inline:disabled { opacity: .4; cursor: default; } */
+
 
 .action-btn-inline:disabled{
   cursor: not-allowed;
@@ -241,9 +257,11 @@ body {
 }
 
 .action-btn-inline i{
-  font-size: 16px;
+  font-size: 1em;
   transition: transform .15s ease, color .2s ease, opacity .2s ease;
 }
+
+
 
 .action-btn-inline:active i{
   color: yellow; /* 누르고 있는 동안만 노랑 */
@@ -259,27 +277,14 @@ body {
 }
 
 
-.sentence[contenteditable="true"] {
+/* .sentence[contenteditable="true"] {
   /* margin-top:auto; margin-bottom:10px;  */
-  outline: none;   /* 기본 테두리 제거 */
-  caret-color: black; /* 커서 색상 지정 (없애려면 transparent) */
-}
+  /* outline: none;   /* 기본 테두리 제거 */
+  /* caret-color: black; 커서 색상 지정 (없애려면 transparent) */
+/* }  */
 
 /* 왜곡 텍스트가 원문 옆에 붙도록 */
 .distorting { display: inline; font-weight: 700; margin-left: .25em; }
-
-/* 인라인 편집/저장 버튼 */
-.action-btn-inline {
-  display: inline-block;
-  margin-left: .25em;
-  padding: 2px 6px;
-  border: 0;
-  background: #eee;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-.action-btn-inline:disabled { opacity: .4; cursor: default; }
 
 
 
@@ -311,7 +316,9 @@ body {
 
 /* 본문 텍스트와 메타는 카드 안에 배치 */
 .paper-card .msg {
-  font-size: clamp(14px, 2.2vh, 22px);
+  /* font-family: "Sunflower", sans-serif; */
+  font-size: clamp(14px,
+   2.2vh, 22px);
   line-height: 1.35;
 }
 .paper-card .meta {
@@ -342,4 +349,34 @@ body {
   margin-right: 6px;
   cursor: pointer;
   transition: color .2s ease;
+}
+
+[contenteditable="true"]:focus {
+  outline: none;
+  -webkit-user-modify: read-write-plaintext-only;
+}
+
+.sunflower-light {
+  font-family: "Sunflower", sans-serif;
+  font-weight: 300;
+}
+
+.poor-story-regular {
+  font-family: "Poor Story", system-ui;
+}
+
+.dokdo-regular {
+  font-family: "Dokdo", system-ui;
+}
+
+.east-sea-dokdo-regular {
+  font-family: "East Sea Dokdo", sans-serif;
+}
+
+.gaegu-regular {
+  font-family: "Gaegu", sans-serif;
+}
+
+.gowun-batang-regular {
+  font-family: "Gowun Batang", serif;
 }
