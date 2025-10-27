@@ -159,3 +159,29 @@ $("#flipbook").bind("turned", function (e, page) {
 // 초기 페이지도 확인하고 싶으면
 console.log("초기 현재 페이지:", $("#flipbook").turn("page"));
 
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const pageMap = {
+    4: "img/8.png",
+    6: "img/1.png",
+    8: "img/4.png"
+  };
+
+  Object.entries(pageMap).forEach(([pageNum, newImgSrc]) => {
+    const page = document.querySelector(`.page${pageNum}`);
+    if (!page) return;
+
+    const firstImg = page.querySelector(".hintnumber img:first-child");
+    if (!firstImg) return;
+
+    firstImg.addEventListener("click", () => {
+      firstImg.style.opacity = "0";
+      setTimeout(() => {
+        firstImg.src = newImgSrc;
+        firstImg.style.opacity = "1";
+      }, 600);
+    });
+  });
+});
+</script>

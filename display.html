@@ -102,18 +102,20 @@
 
 
     <!-- 2. 배경 설명 페이지 -->
-         <div class="page2" >
-         </div>
-   
+    <div class="page2">
+      <video id="page2video" src="img/before.mp4" muted playsinline autoplay preload="auto"
+        style="width:auto;height:100%;display:block;"> </video>
+    </div>
+
 
 
     <!-- 페이지3 -->
     <div class="page page3">
       <header class="page-header">
         <!-- <div class="header-left">西江大學校</div> -->
-         <div class="header-left">
-    <img src="img/logo.png" alt="Logo" class="logo">
-  </div>
+        <div class="header-left">
+          <img src="img/logo.png" alt="Logo" class="logo">
+        </div>
         <!-- <div class="header-center">Art with Impact</div> -->
         <div class="header-right current-date"></div>
       </header>
@@ -141,6 +143,14 @@
     </div>
 
     <div class="page page4">
+      <div class="hintpage">
+        첫 번째 문장을 수정해줘서 고마워요. 힌트는...
+        <div class="hintnumber">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+        </div>
+      </div>
 
     </div>
 
@@ -151,9 +161,9 @@
     <div class="page page5">
       <header class="page-header">
         <!-- <div class="header-left">西江大學校</div> -->
-          <div class="header-left">
-    <img src="img/logo.png" alt="Logo" class="logo">
-  </div>
+        <div class="header-left">
+          <img src="img/logo.png" alt="Logo" class="logo">
+        </div>
         <!-- <div class="header-center">Art with Impact</div> -->
         <div class="header-right current-date"></div>
       </header>
@@ -182,15 +192,25 @@
 
 
 
- <div class="page page6"></div>
+    <div class="page page6">
+      <div class="hintpage">
+        두 번째 문장을 수정해줘서 고마워요. 힌트는...
+        <div class="hintnumber">
+          <img src="img/8.png" alt="Frame" class="Frame">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+        </div>
+      </div>
+
+    </div>
 
     <!-- 페이지 5 -->
     <div class="page page7">
       <header class="page-header">
         <!-- <div class="header-left">西江大學校</div> -->
-          <div class="header-left">
-    <img src="img/logo.png" alt="Logo" class="logo">
-  </div>
+        <div class="header-left">
+          <img src="img/logo.png" alt="Logo" class="logo">
+        </div>
         <!-- <div class="header-center">Art with Impact</div> -->
         <div class="header-right current-date"></div>
       </header>
@@ -220,16 +240,27 @@
 
 
 
-     <div class="page page8"></div>
+    <div class="page page8">
+      <div class="hintpage">
+        세 번째 문장을 수정해줘서 고마워요. 힌트는...
+        <div class="hintnumber">
+          <img src="img/8.png" alt="Frame" class="Frame">
+          <img src="img/1.png" alt="Frame" class="Frame">
+          <img src="img/Frame.png" alt="Frame" class="Frame">
+        </div>
+      </div>
+    </div>
 
     <div class="page page9">
       <header class="page-header">
         <!-- <div class="header-left">西江大學校</div> -->
-          <div class="header-left">
-    <img src="img/logo.png" alt="Logo" class="logo">
-  </div>
+        <div class="header-left">
+          <img src="img/logo.png" alt="Logo" class="logo">
+        </div>
+
         <!-- <div class="header-center">Art with Impact</div> -->
-        <div class="header-right current-date"></div>
+        <div class="header-right current-date">
+        </div>
       </header>
       <div class="page-divider"></div>
       <h1 class="page-title">公 論 紙</h1>
@@ -258,9 +289,13 @@
     <!-- 최종 힌트 페이지 -->
 
     <div class="page page10">
-        </div>
+      <!-- <p>gkdldfdf</p> -->
+      <video id="page10video" src="img/After.mp4" autoplay muted playsinline preload="auto"
+        style="width:auto;height:100%;display:block;"> </video>
+    </div>
 
   </div>
+
 
   </div>
 
@@ -279,6 +314,54 @@
 
     });
   </script>
+
+  <script>
+    // flipbook 초기화 바로 아래에 붙이기
+    (function () {
+      const v2 = document.getElementById('page2video');
+      const v10 = document.getElementById('page10video');
+
+      function tryPlay(v) {
+        if (!v) return;
+        v.muted = true;                              // iOS/모바일 자동재생 필수
+        v.setAttribute('playsinline', '');
+        v.playsInline = true;
+        // 가끔 초기 상태라면 로드부터
+        if (v.readyState < 2) v.load();
+
+        const p = v.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {
+            // 자동재생이 막히면 첫 사용자 제스처에서 재생
+            const resume = () => {
+              v.play().finally(() => {
+                window.removeEventListener('click', resume);
+                window.removeEventListener('touchend', resume);
+              });
+            };
+            window.addEventListener('click', resume, { once: true });
+            window.addEventListener('touchend', resume, { once: true });
+          });
+        }
+      }
+
+      // 페이지 전환 시점에 재생/정지
+      $("#flipbook").on("turned", function (_e, page) {
+        // page2
+        if (v2) {
+          if (page === 2) tryPlay(v2);
+          else { v2.pause(); v2.currentTime = 0; }
+        }
+        // page10
+        if (v10) {
+          if (page === 10) tryPlay(v10);
+          else { v10.pause(); v10.currentTime = 0; }
+        }
+      });
+    })();
+  </script>
+
+
   <script defer src="./script.js"></script>
 
   <script>
@@ -380,26 +463,26 @@
         ghost.addEventListener('input', onInput);
 
         btn.onclick = async () => {
-  const edited = ghost.textContent.trim();
-  if (edited.length < 10) return;
+          const edited = ghost.textContent.trim();
+          if (edited.length < 10) return;
 
-  // 1. 원문(anchor) 교체
-  anchor.textContent = edited;
+          // 1. 원문(anchor) 교체
+          anchor.textContent = edited;
 
-  // 2. Firestore에 저장해서 index.html / display.html 리스트에도 남기기
-  try {
-    await firebase.firestore().collection("sentences").add({
-      text: edited,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-  } catch (err) {
-    console.error("저장 실패:", err);
-  }
+          // 2. Firestore에 저장해서 index.html / display.html 리스트에도 남기기
+          try {
+            await firebase.firestore().collection("sentences").add({
+              text: edited,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          } catch (err) {
+            console.error("저장 실패:", err);
+          }
 
-  // 3. 편집 UI 정리
-  ghost.remove();
-  btn.remove();
-};
+          // 3. 편집 UI 정리
+          ghost.remove();
+          btn.remove();
+        };
 
       }
 
@@ -432,6 +515,8 @@
       });
     });
   </script>
+
+  <!-- 영상 대신 타이핑할 때 필요한 코드! 1027
 <style>
   #flipbook .page2 {
     white-space: pre-wrap;
@@ -451,8 +536,8 @@
     margin-left: 2px;
   }
   @keyframes blink { 50% { opacity: 0; } }
-</style>
-<!-- 
+</style> -->
+  <!-- 
 <script>
 (function(){
   const container = document.querySelector('#flipbook .page2');
@@ -574,7 +659,7 @@
 
 
 
-<!-- <script>function startPage2Typing() {
+  <!-- <script>function startPage2Typing() {
   const page2 = document.querySelector('#flipbook .page2');
   if (!page2) return;
   
@@ -645,6 +730,43 @@
     }
   }, 100); // 타이핑 속도 조절 (숫자가 작을수록 빠름)
 }</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // page: 페이지 번호, idx: 바꿀 대상(0=첫째, 1=둘째, 2=셋째), src: 바꿀 이미지
+  const PLAN = [
+    { page: 4, idx: 0, src: 'img/8.png' }, // page4: 첫번째 → 8.png
+    { page: 6, idx: 1, src: 'img/1.png' }, // page6: 두번째 → 1.png
+    { page: 8, idx: 2, src: 'img/4.png' }, // page8: 세번째 → 4.png
+  ];
+
+  // 미리 로드(깜빡임 방지)
+  PLAN.forEach(({ src }) => { const i = new Image(); i.src = src; });
+
+  PLAN.forEach(({ page, idx, src }) => {
+    const wrap = document.querySelector(`.page${page} .hintnumber`);
+    if (!wrap) return;
+    const imgs = wrap.querySelectorAll('img');
+    const target = imgs[idx];
+    if (!target) return;
+
+    const onClick = () => {
+      // 한 번만 바뀌면 되면 클릭 핸들러 제거
+      target.removeEventListener('click', onClick);
+
+      // 페이드 아웃 → src 교체 → 페이드 인
+      target.style.opacity = '0';
+      setTimeout(() => {
+        target.src = src;
+        target.style.opacity = '1';
+      }, 300); // 타이밍은 transition과 맞춰서
+    };
+
+    target.addEventListener('click', onClick, { once: true });
+  });
+});
+</script>
+
+
 
 </body>
 

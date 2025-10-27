@@ -380,3 +380,32 @@ body {
 .gowun-batang-regular {
   font-family: "Gowun Batang", serif;
 }
+
+.hintpage
+{
+  display: flex;
+  flex-direction: column;   /* 문장 위, 이미지 아래 세로 배치 */
+  align-items: center;      /* 수평 가운데 정렬 */
+  justify-content: center;
+  margin-top: 35%;          /* 페이지 위에서 조금 내리기 */
+  text-align: center;
+  gap: 2vh;              
+}
+/* 이미지들을 감싸는 래퍼 */
+.hintnumber {
+  display: flex;
+  justify-content: space-between;  /* 좌우로 균등 배치 */
+  align-items: center;
+  width: 80%;                      /* 전체 폭의 80%만 차지 */
+  gap: 1vw;                        /* 간격 아주 조금 */
+}
+
+/* 실제 이미지 스타일 */
+.hintnumber img {
+  flex: 1;                  /* 세 개가 자동으로 3등분 */
+  max-width: 30%;           /* 각 이미지 최대 폭 제한 */
+  height: auto;
+  object-fit: contain;      /* 비율 유지 */
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
