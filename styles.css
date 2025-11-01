@@ -446,3 +446,51 @@ body {
   transition: opacity .3s ease;
   cursor:pointer;
 }
+
+#final-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;              /* 기본 숨김 */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 팝업 본체: 찢어진 종이 이미지 자체 */
+.final-popup-inner {
+  position: relative;
+  background-image: url("img/finalpopup.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* 원본 비율 유지 (피그마 width=734, height=278 기준) */
+  width: min(90vw, 60vh);
+  aspect-ratio: 734 / 278;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* 글자는 이미지 위에 얹히는 거라 text-align 필요 */
+  text-align: center;
+  color: #000;
+}
+
+/* 카운트다운 문장 한 줄 */
+.final-popup-countline {
+  font-size: 2.2vh;   /* 뷰포트 세로 기준이라 전체랑 같이 스케일 */
+  font-weight: 700;
+  line-height: 1.4;
+
+  /* 이미지 안에서의 세로 위치를 맞추려면 margin/padding으로 내리거나 올려 */
+  /* 예: 카운트 텍스트가 이미지 아래쪽에 있으면 margin-top을 크게 준다 */
+  margin-top: 8vh;   /* 값은 네 디자인 보고 조정 */
+  /* width 제한해서 줄바꿈 안정화하고 싶으면 아래 같이 */
+  width: 80%;
+}
+#count-num {
+  font-weight: 700;
+}
