@@ -1,6 +1,6 @@
 // 공용 엘리먼트
-const inputEl   = document.getElementById("messageInput");
-const sendBtn   = document.getElementById("sendBtn");
+const inputEl   = document.getElementById("messageInput"); //display.html
+const sendBtn   = document.getElementById("sendBtn"); //display.html
 const list1El   = document.getElementById("messageList");   // index.html
 const list2El   = document.getElementById("displayList");   // display.html
 
