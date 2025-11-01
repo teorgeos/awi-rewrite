@@ -4,6 +4,70 @@ const sendBtn   = document.getElementById("sendBtn"); //display.html
 const list1El   = document.getElementById("messageList");   // index.html
 const list2El   = document.getElementById("displayList");   // display.html
 
+const overlayEl       = document.getElementById("cardOverlay");
+const overlayInnerEl  = overlayEl ? overlayEl.querySelector(".overlay-inner") : null;
+const overlayMsgEl    = document.getElementById("overlayMsg");
+const overlayMetaEl   = document.getElementById("overlayMeta");
+const overlayCloseBtn = document.getElementById("overlayCloseBtn");
+
+function openOverlay(fromCardEl) {
+  if (!overlayEl || !overlayInnerEl || !overlayMsgEl || !overlayMetaEl) return;
+
+  // 카드 안의 요소들
+  const msgEl  = fromCardEl.querySelector(".msg");
+  const metaEl = fromCardEl.querySelector(".meta");
+
+  const msgText  = msgEl?.textContent || "";
+  const metaText = metaEl?.textContent || "";
+
+  // 1) 텍스트 넣기
+  overlayMsgEl.textContent  = msgText;
+  overlayMetaEl.textContent = metaText;
+
+  // 2) 기존에 남아있던 폰트 클래스 제거
+  //    (sunflower-light, dokdo-regular 같은 애들 싹 지우고 새로 세팅)
+  overlayMsgEl.classList.remove(
+    "sunflower-light",
+    "poor-story-regular",
+    "dokdo-regular",
+    "east-sea-dokdo-regular",
+    "gaegu-regular",
+    "gowun-batang-regular"
+  );
+
+  // 3) 현재 카드의 msg가 가진 폰트 클래스를 그대로 복사
+  if (msgEl) {
+    FONT_CLASSES.forEach(cls => {
+      if (msgEl.classList.contains(cls)) {
+        overlayMsgEl.classList.add(cls);
+      }
+    });
+  }
+
+  // 4) 배경 종이 이미지도 그대로 복사
+  const bgImg = fromCardEl.style.backgroundImage;
+  overlayInnerEl.style.backgroundImage = bgImg || "none";
+
+  // 5) 팝업 열기
+  overlayEl.style.display = "flex";
+}
+
+
+// 닫기
+if (overlayCloseBtn && overlayEl) {
+  overlayCloseBtn.addEventListener("click", () => {
+    overlayEl.style.display = "none";
+  });
+}
+// 오버레이 검은 영역 클릭해도 닫히게 (안 원하면 이 부분 지워)
+if (overlayEl) {
+  overlayEl.addEventListener("click", (e) => {
+    // 바깥(overlayEl 자체)을 클릭한 경우만 닫기
+    if (e.target === overlayEl) {
+      overlayEl.style.display = "none";
+    }
+  });
+}
 
 const FONT_CLASSES = [
   "sunflower-light",
@@ -27,76 +91,107 @@ const FONT_CLASSES = [
 // }
 
 // 안전하게 리스트에 추가 (랜덤 위치/회전/크기 + 종이 텍스처)
+
 function addRow(ul, text, ts) {
   if (!ul || !text) return;
 
-  // 1) 종이 텍스처 후보 (프로젝트에 있는 PNG 이름으로 맞춰줘)
+  // 텍스처 후보
   const papers = [
     "img/paper1.png", "img/paper2.png", "img/paper3.png", "img/paper4.png", 
-        "img/paper5.png", "img/paper6.png", "img/paper7.png", "img/paper8.png", 
-            "img/paper9.png", "img/paper10.png", "img/paper11.png", "img/paper12.png"
+    "img/paper5.png", "img/paper6.png", "img/paper7.png", "img/paper8.png", 
+    "img/paper9.png", "img/paper10.png", "img/paper11.png", "img/paper12.png"
   ];
-  const pick = () => papers[Math.floor(Math.random()*papers.length)];
+  const pick = () => papers[Math.floor(Math.random() * papers.length)];
 
-  // 2) 엘리먼트 구성
+  // DOM 만들기
   const li   = document.createElement('li');
   const msg  = document.createElement('div');
   const meta = document.createElement('div');
 
-  li.className = 'paper-card';
-  msg.className = 'msg';
+  li.className   = 'paper-card';
+  msg.className  = 'msg';
   meta.className = 'meta';
 
-  //텍스트
+  // 폰트 번갈아 쓰기
   const fontIdx = Number(ul.dataset.fontIdx || 0);
   msg.classList.add(FONT_CLASSES[fontIdx]);
   ul.dataset.fontIdx = (fontIdx + 1) % FONT_CLASSES.length;
 
-
-
-  msg.textContent = text;
+  msg.textContent  = text;
   meta.textContent = ts ? `시간: ${ts}` : '';
 
   li.append(msg, meta);
-  ul.appendChild(li); // 먼저 DOM에 붙여야 clientWidth/Height 계산 가능
+  ul.appendChild(li); // 먼저 붙여야 크기 계산 가능
 
-  // 3) 랜덤 크기 (폭 기준)
+  // 랜덤 폭
   const minW = 160;
   const maxW = 400;
-  const w = Math.floor(Math.random()*(maxW - minW) + minW);
+  const w = Math.floor(Math.random() * (maxW - minW) + minW);
   li.style.width = w + 'px';
 
-  // 높이는 내용에 따라 자동; 다만 너무 길면 보드 밖으로 나가므로 max-height로 컷
+  // 세로 제한
   const maxH = Math.max(240, Math.floor(window.innerHeight * 0.6));
   li.style.maxHeight = maxH + 'px';
   li.style.overflow = 'hidden';
 
-  // 4) 텍스처/각도 랜덤
+  // 랜덤 텍스처 & 회전
   li.style.backgroundImage = `url('${pick()}')`;
-  const deg = (Math.random() * 70) - 35; // -35° ~ 35°
+  const deg = (Math.random() * 70) - 35; // -35 ~ +35도
   li.style.transform = `rotate(${deg}deg)`;
 
-  // 5) 위치 랜덤 (컨테이너 경계 안)
+  // 컨테이너(.board-wrapper 안의 ul) 크기 기준 랜덤 위치
+    // 5) 위치 랜덤 (보드 중앙 기준으로 흩뿌리기)
   const containerRect = ul.getBoundingClientRect();
-  // 현재 li의 바운딩은 width만 확정된 상태에서 대략 예측
+
   const liRect = li.getBoundingClientRect();
   const cardW = liRect.width;
-  const cardH = Math.min(liRect.height || 260, maxH); // 초기치 추정
+  const cardH = Math.min(liRect.height || 260, maxH);
 
-  const pad = 20; // 가장자리 여유
-  const maxLeft = Math.max(pad, containerRect.width  - cardW - pad);
-  const maxTop  = Math.max(pad, containerRect.height - cardH - pad);
+  // 보드 중심 좌표(카드의 left/top은 카드의 좌상단 기준이라 보정 필요)
+  const boardW = containerRect.width;
+  const boardH = containerRect.height;
 
-  const left = Math.floor(Math.random() * maxLeft);
-  const top  = Math.floor(Math.random() * maxTop);
+  const centerX = boardW / 2 - cardW / 2;
+  const centerY = boardH / 2 - cardH / 2;
+
+  // 퍼짐 반경 (값 키우면 더 흩어진다)
+  const spreadX = boardW * 0.45; // 전체의 90% 폭 안에서만 뿌리자
+  const spreadY = boardH * 0.45; // 전체의 90% 높이 안에서만 뿌리자
+
+  // -1 ~ 1 사이 균등 난수
+  function randUnit() {
+    return (Math.random() * 2 - 1);
+  }
+
+  // 좌우/상하로 튕겨 나가게
+  let left = centerX + randUnit() * spreadX;
+  let top  = centerY + randUnit() * spreadY;
+
+  // 보드 밖으로 잘리는 건 막기 (안전하게 20px 여백 안에서만)
+  const pad = 20;
+  const minLeft = pad;
+  const maxLeft = boardW - cardW - pad;
+  const minTop  = pad;
+  const maxTop  = boardH - cardH - pad;
+
+  if (left < minLeft) left = minLeft;
+  if (left > maxLeft) left = maxLeft;
+  if (top  < minTop)  top  = minTop;
+  if (top  > maxTop)  top  = maxTop;
 
   li.style.left = left + 'px';
   li.style.top  = top  + 'px';
 
-  // 6) z-index 순서대로 올리기 (최근 것이 위로)
+
+  // z-index 최신 카드가 위
   const currentTop = Number(ul.dataset.zTop || 1);
   li.style.zIndex = currentTop + 1;
   ul.dataset.zTop = String(currentTop + 1);
+
+  // ===== 팝업 열기 이벤트 =====
+  li.addEventListener("click", () => {
+    openOverlay(li);
+  });
 }
 
 
@@ -158,5 +253,4 @@ $("#flipbook").bind("turned", function (e, page) {
 
 // 초기 페이지도 확인하고 싶으면
 console.log("초기 현재 페이지:", $("#flipbook").turn("page"));
-
 

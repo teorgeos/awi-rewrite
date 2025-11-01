@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dokdo&family=East+Sea+Dokdo&family=Gaegu&family=Gowun+Batang&family=Poor+Story&family=Sunflower:wght@300&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Yuji+Boku&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,15 +52,21 @@
   <section class="archive-subtitle">실시간으로 쌓이는 문장들을 클릭해보세요</section>
 
   <!-- <div class="status" id="status">연결 상태: <strong>연결 중…</strong></div> -->
-<link
-    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Yuji+Boku&display=swap"
-    rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=Gowun+Batang&family=Jua&family=Noto+Sans+KR:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Song+Myung&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+  <div class="board-wrapper">
   <ul id="displayList"></ul>
+  </div>
+
+  <!-- 카드 전체보기 팝업 -->
+<div id="cardOverlay">
+  <div class="overlay-inner">
+    <button class="overlay-close-btn" id="overlayCloseBtn">✕</button>
+    <div class="overlay-msg" id="overlayMsg"></div>
+    <div class="overlay-meta" id="overlayMeta"></div>
+  </div>
+</div>
+
+
 <script defer src="./script.js"></script>
 <!-- <a href="./display.html">입력 화면</a>  보기→입력 -->
 <!-- <a href="./index.html">보기 화면</a>    입력→보기(루트라면 './'도 가능) -->

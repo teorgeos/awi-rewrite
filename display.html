@@ -448,7 +448,7 @@
       ghost.insertAdjacentElement('afterend', btn);
 
       // 3) 타자 효과
-      const tw = new Typewriter(ghost, { autoStart: false, delay: 40, cursor: '|' });
+      const tw = new Typewriter(ghost, { autoStart: false, delay: 100, cursor: '|' });
       tw.typeString(text).start();
 
       // 4) 인라인 편집 진입
@@ -456,7 +456,7 @@
         // 타자 커서 제거
         const cursor = ghost.parentNode.querySelector('.Typewriter__cursor');
         if (cursor) cursor.remove();
-
+        ghost.textContent = "";
         ghost.contentEditable = 'true';
         ghost.focus();
         btn.textContent = '저장';
