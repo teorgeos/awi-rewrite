@@ -771,6 +771,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
+
 <script>
 (function(){
   const flip = $("#flipbook");
@@ -806,9 +808,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (n <= 1) {
         clearInterval(countdownInt);
         // 다 됐으면 초기화하고 첫 페이지로
-        resetExperience();
+        // resetExperience();
+        location.reload();
       }
-    }, 1000);
+    }, 500);
   }
 
   // 전체 경험 초기화
