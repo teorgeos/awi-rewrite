@@ -144,7 +144,7 @@
 
     <div class="page page4">
       <div class="hintpage">
-        첫 번째 카드를 클릭해서 힌트를 확인하세요!
+        첫 번째 카드를 클릭해서 힌트를 확인하세요! <br> (힌트를 확인하면, 자동으로 페이지가 넘어가요.)
         <div class="hintnumber">
           <img src="img/Frame.png" alt="Frame" class="Frame">
           <img src="img/Frame.png" alt="Frame" class="Frame">
@@ -194,7 +194,7 @@
 
     <div class="page page6">
       <div class="hintpage">
-           두 번째 카드를 클릭해서 힌트를 확인하세요!
+           두 번째 카드를 클릭해서 힌트를 확인하세요!  <br> (힌트를 확인하면, 자동으로 페이지가 넘어가요.)
         <div class="hintnumber">
           <img src="img/8.png" alt="Frame" class="Frame">
           <img src="img/Frame.png" alt="Frame" class="Frame">
@@ -242,7 +242,7 @@
 
     <div class="page page8">
       <div class="hintpage">
-           세 번째 카드를 클릭해서 힌트를 확인하세요! <br> 보이는 숫자를 기억해주세요 :)
+           세 번째 카드를 클릭해서 힌트를 확인하세요! <br> p.s. 아직 힌트가 하나 더 남았어요 :)
         <div class="hintnumber">
           <img src="img/8.png" alt="Frame" class="Frame">
           <img src="img/1.png" alt="Frame" class="Frame">
@@ -770,6 +770,10 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         target.src = src;
         target.style.opacity = '1';
+
+          setTimeout(() => {
+          $("#flipbook").turn("next");
+        }, 3000);
       }, 300); // 타이밍은 transition과 맞춰서
     };
 
@@ -804,7 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
     popupEl.setAttribute('aria-hidden', 'false');
 
     // 카운트다운 시작 (10 → 1)
-    let n = 10;
+    let n = 15;
     countNumEl.textContent = n;
 
     countdownInt = setInterval(() => {
