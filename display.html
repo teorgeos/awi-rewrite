@@ -488,6 +488,12 @@
           // 3. 편집 UI 정리
           ghost.remove();
           btn.remove();
+
+        // 4. 2초 기다렸다가 자동으로 다음 페이지로 넘기기
+    setTimeout(() => {
+      // flipbook 다음 페이지로 이동
+      $("#flipbook").turn("next");
+    }, 2000); // 2000ms = 2초
         };
 
       }
